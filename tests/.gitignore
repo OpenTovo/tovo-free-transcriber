@@ -1,0 +1,5 @@
+# exclude certain files since they are too big
+*.MOV
+*.wav
+*.mp4
+*.mp3

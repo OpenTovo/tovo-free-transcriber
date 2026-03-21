@@ -1,0 +1,4 @@
+[submodule "whisper.cpp"]
+	path = whisper.cpp
+	url = https://github.com/qiweiii/whisper.cpp.git
+	branch = tovo-custom-wasm

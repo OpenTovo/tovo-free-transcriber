@@ -1,0 +1,47 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "TOVO Free Transcriber",
+  "name_for_model": "free_transcriber",
+  "description_for_human": "Free, private audio and video transcription service that runs entirely in your browser",
+  "description_for_model": "A completely free transcription service that converts audio and video files to text using OpenAI's Whisper model. Runs entirely in browser via WebAssembly for complete privacy. No registration required, no file uploads to servers. Supports multiple audio formats (MP3, WAV, M4A, FLAC) and video formats (MP4, MOV, AVI). Can also translate foreign audio to English. Perfect for transcribing lectures, interviews, meetings, podcasts, and voice recordings.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "browser_tool",
+    "url": "https://transcribe.tovo.dev"
+  },
+  "logo_url": "https://transcribe.tovo.dev/tovo-logo-384.png",
+  "contact_email": "support@tovo.dev",
+  "legal_info_url": "https://transcribe.tovo.dev/docs",
+  "tags": [
+    "transcription",
+    "audio-to-text",
+    "video-to-text",
+    "speech-recognition",
+    "whisper",
+    "privacy",
+    "free",
+    "browser-based",
+    "offline"
+  ],
+  "capabilities": [
+    "audio transcription",
+    "video transcription",
+    "translation to English",
+    "real-time progress tracking",
+    "multiple file format support",
+    "offline processing",
+    "privacy-first design"
+  ],
+  "use_cases": [
+    "transcribe lectures and educational content",
+    "convert interviews to text",
+    "generate podcast transcripts",
+    "create video captions and subtitles",
+    "transcribe meeting recordings",
+    "convert voice memos to text",
+    "transcribe research interviews",
+    "accessibility text generation"
+  ]
+}

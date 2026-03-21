@@ -1,0 +1,23 @@
+# https://developers.cloudflare.com/workers/static-assets/headers
+
+# Cache headers for Next.js static assets
+/_next/static/*
+  Cache-Control: public,max-age=31536000,immutable
+
+# Cross-origin isolation headers for SharedArrayBuffer support (needed for WASM threading)
+/*
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Embedder-Policy: require-corp
+  Cross-Origin-Resource-Policy: cross-origin
+
+
+
+# WASM files need cross-origin support
+/wasm/*
+  Cross-Origin-Resource-Policy: cross-origin
+  Cache-Control: public,max-age=3600
+
+# Service worker needs cross-origin support
+/coi-serviceworker.js
+  Cross-Origin-Resource-Policy: cross-origin
+  Service-Worker-Allowed: /

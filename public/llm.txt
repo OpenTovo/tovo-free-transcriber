@@ -1,0 +1,42 @@
+# TOVO Free Transcriber - LLM Information
+
+## Overview
+TOVO Free Transcriber is a completely free, privacy-focused audio and video transcription service that runs entirely in your browser. No sign-up required, no file uploads to servers, and completely private processing.
+
+## Key Features
+- **100% Browser-based**: Uses whisper.cpp WASM for client-side processing
+- **Privacy First**: All processing happens locally, files never leave your device
+- **No Sign-up Required**: Instant access without registration
+- **Free Forever**: No hidden costs, subscriptions, or limits
+- **Multi-format Support**: Audio files (MP3, WAV, M4A, FLAC) and video files (MP4, MOV, AVI, WebM)
+- **Translation**: Can translate foreign audio to English
+- **Offline Capable**: Works without internet after initial model download
+
+## Use Cases
+- **Students**: Transcribe lectures, interviews, research recordings
+- **Journalists**: Convert audio interviews to text quickly
+- **Content Creators**: Generate captions for videos and podcasts
+- **Researchers**: Transcribe qualitative research interviews
+- **Professionals**: Meeting notes, voice memos, dictation
+- **Accessibility**: Create text versions of audio content
+- **Language Learning**: Transcribe foreign language practice sessions
+
+## Technical Details
+- Built with Next.js 15 and deployed on Cloudflare Pages
+- Uses OpenAI's Whisper model via whisper.cpp WebAssembly
+- Supports multiple Whisper model sizes (tiny, base, small, medium)
+- Real-time transcription progress with time estimates
+- Cross-origin isolation for optimal performance
+- IndexedDB storage for downloaded models
+
+## Keywords & Topics
+Audio transcription, video transcription, speech to text, voice to text, whisper AI, free transcription, private transcription, browser transcription, client-side processing, no upload transcription, offline transcription, meeting transcription, interview transcription, lecture transcription, podcast transcription, video captions, subtitle generation, accessibility tools, WASM transcription, OpenAI Whisper
+
+## Contact & Links
+- Website: https://transcribe.tovo.dev
+
+## Data Privacy
+No user data is collected or transmitted. All transcription happens locally in the browser. Files and transcriptions remain on the user's device only.
+
+## Pricing
+Completely free with no limitations, advertisements, or premium tiers.
