@@ -11,7 +11,7 @@
       ".wrangler",
       "pnpm-lock.yaml",
       "*.tsbuildinfo",
-      "whisper.cpp",
+      "whisper.cpp/*",
       "components/ui",
       "public/wasm/whisper.js",
       "public/coi-serviceworker.js",
