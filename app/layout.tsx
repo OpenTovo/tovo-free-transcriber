@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Geist, Geist_Mono, Lexend } from 'next/font/google'
 import './globals.css'
 import { Providers } from '@/components/providers'
 import { GoogleAnalytics } from '@next/third-parties/google'
@@ -12,6 +12,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
+})
+
+const lexend = Lexend({
+  variable: '--font-lexend',
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
 })
 
 export const metadata: Metadata = {
@@ -93,15 +99,16 @@ export const metadata: Metadata = {
     },
   },
   manifest: '/manifest.json',
+}
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#ffffff' },
     { media: '(prefers-color-scheme: dark)', color: '#000000' },
   ],
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-  },
 }
 
 const structuredData = {
@@ -158,6 +165,8 @@ const structuredData = {
   },
 }
 
+const jsonLdScript = <script type='application/ld+json'>{JSON.stringify(structuredData)}</script>
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -165,13 +174,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' suppressHydrationWarning>
-      <head>
-        <script
-          type='application/ld+json'
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-        />
-      </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <head>{jsonLdScript}</head>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${lexend.variable} antialiased`}
+        style={{ fontFamily: 'var(--font-lexend), var(--font-geist-sans), system-ui, sans-serif' }}
+      >
         <Providers>{children}</Providers>
       </body>
       <GoogleAnalytics gaId='G-0WL7HRBMJ2' />

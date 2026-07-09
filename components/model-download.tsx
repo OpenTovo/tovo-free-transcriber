@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { whisperModelManager, WHISPER_MODELS, WhisperModelKey } from '@/lib/whisper-models'
+import { WHISPER_MODELS, type WhisperModelKey, whisperModelManager } from '@/lib/whisper-models'
+import { useEffect, useState } from 'react'
 
 interface ModelDownloadProps {
   onModelReady?: (modelKey: WhisperModelKey, modelData: Uint8Array) => void
@@ -99,7 +99,7 @@ export default function ModelDownload({ onModelReady }: ModelDownloadProps) {
     const k = 1024
     const sizes = ['Bytes', 'KB', 'MB', 'GB']
     const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
+    return `${Number.parseFloat((bytes / k ** i).toFixed(2))} ${sizes[i]}`
   }
 
   const formatDate = (timestamp: number): string => {
@@ -134,6 +134,7 @@ export default function ModelDownload({ onModelReady }: ModelDownloadProps) {
             const isDownloaded = downloadedModels.includes(modelKey)
             const isDownloading = downloading[modelKey]
             const progress = downloadProgress[modelKey] || 0
+            const downloadedModel = storageInfo.models.find(m => m.name === modelKey)
 
             return (
               <div
@@ -152,12 +153,9 @@ export default function ModelDownload({ onModelReady }: ModelDownloadProps) {
                       Size: {formatFileSize(model.size)}
                     </p>
 
-                    {isDownloaded && storageInfo.models.find(m => m.name === modelKey) && (
+                    {isDownloaded && downloadedModel && (
                       <p className='text-green-600 dark:text-green-400 text-xs mt-1'>
-                        Downloaded:{' '}
-                        {formatDate(
-                          storageInfo.models.find(m => m.name === modelKey)!.downloadedAt
-                        )}
+                        Downloaded: {formatDate(downloadedModel.downloadedAt)}
                       </p>
                     )}
                   </div>
@@ -166,12 +164,14 @@ export default function ModelDownload({ onModelReady }: ModelDownloadProps) {
                     {isDownloaded ? (
                       <>
                         <button
+                          type='button'
                           onClick={() => loadModel(modelKey)}
                           className='px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 transition-colors text-sm'
                         >
                           Load Model
                         </button>
                         <button
+                          type='button'
                           onClick={() => deleteModel(modelKey)}
                           className='px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 transition-colors text-sm'
                         >
@@ -180,6 +180,7 @@ export default function ModelDownload({ onModelReady }: ModelDownloadProps) {
                       </>
                     ) : (
                       <button
+                        type='button'
                         onClick={() => downloadModel(modelKey)}
                         disabled={isDownloading}
                         className='px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 dark:disabled:bg-gray-600 disabled:cursor-not-allowed transition-colors text-sm'

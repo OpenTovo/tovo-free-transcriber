@@ -10,10 +10,10 @@
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": {
     "binding": "ASSETS",
-    "directory": ".open-next/assets",
+    "directory": ".open-next/assets"
   },
   "observability": {
-    "enabled": true,
+    "enabled": true
   },
   /**
    * Smart Placement
@@ -40,15 +40,15 @@
   "env": {
     "production": {
       "vars": {
-        "NEXT_PUBLIC_R2_BASE_URL": "https://whisper-models.tovo.dev",
-      },
+        "NEXT_PUBLIC_R2_BASE_URL": "https://whisper-models.tovo.dev"
+      }
     },
     "preview": {
       "vars": {
-        "NEXT_PUBLIC_R2_BASE_URL": "https://whisper-models.tovo.dev",
-      },
-    },
-  },
+        "NEXT_PUBLIC_R2_BASE_URL": "https://whisper-models.tovo.dev"
+      }
+    }
+  }
   /**
    * Note: Use secrets to store sensitive data.
    * https://developers.cloudflare.com/workers/configuration/secrets/

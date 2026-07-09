@@ -1,12 +1,11 @@
 'use client'
 
+import { Toaster } from '@/components/ui/sonner'
 import { Provider } from 'jotai'
 import { ThemeProvider as NextThemeProvider } from 'next-themes'
-import { Toaster } from '@/components/ui/sonner'
 
 interface ProvidersProps {
   children: React.ReactNode
-  themeProps?: React.ComponentProps<typeof NextThemeProvider>
 }
 
 function ThemeProviderWrapper({ children }: { children: React.ReactNode }) {
@@ -18,7 +17,7 @@ function ThemeProviderWrapper({ children }: { children: React.ReactNode }) {
   )
 }
 
-export function Providers({ children, themeProps }: ProvidersProps) {
+export function Providers({ children }: ProvidersProps) {
   return (
     <Provider>
       <ThemeProviderWrapper>{children}</ThemeProviderWrapper>

@@ -10,7 +10,7 @@ let audioContext: AudioContext | null = null
 function getAudioContext(): AudioContext | null {
   try {
     if (!audioContext) {
-      audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
+      audioContext = new (window.AudioContext || window.webkitAudioContext)()
     }
 
     // Resume AudioContext if it's suspended (required by browser autoplay policies)

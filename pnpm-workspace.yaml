@@ -1,0 +1,21 @@
+packages:
+  - .
+
+allowBuilds:
+  esbuild: true
+  sharp: true
+  unrs-resolver: true
+  workerd: true
+
+overrides:
+  # --- pnpm v11 trust-downgrade guards (install-time, not audit) ---
+  # @types/node pulls undici-types@6.21.0 and @babel/core pulls semver@6.3.1;
+  # both lost provenance attestation and are blocked by pnpm's supply-chain
+  # check. Pin to trusted releases (synced with tovo.dev).
+  undici-types: 6.27.0
+  semver@6: 7.8.4
+  # --- Audit fix (moderate) ---
+  # postcss <8.5.10: XSS via unescaped </style> in CSS stringify output.
+  # Pulled transitively by next 15 / @next/third-parties / @opennextjs/cloudflare;
+  # overridden because next 15 can't be bumped to a release bundling the patch.
+  postcss: 8.5.14

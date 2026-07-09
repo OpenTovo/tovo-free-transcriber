@@ -1,0 +1,59 @@
+'use client'
+
+import { useAtom } from 'jotai'
+import { useTheme } from 'next-themes'
+import { useEffect, useState } from 'react'
+import { Moon, Sun } from 'lucide-react'
+import { themeAtom } from '@/lib/atoms'
+
+export function ThemeToggle() {
+  const [currentTheme, setTheme] = useAtom(themeAtom)
+  const { setTheme: setNextTheme, theme: nextTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const handleThemeChange = (newTheme: 'light' | 'dark') => {
+    setTheme(newTheme)
+    setNextTheme(newTheme)
+  }
+
+  if (!mounted) {
+    return (
+      <div className='flex items-center gap-1 bg-card border border-border rounded-lg p-1'>
+        <div className='p-2 rounded-md w-8 h-8'></div>
+        <div className='p-2 rounded-md w-8 h-8'></div>
+      </div>
+    )
+  }
+
+  return (
+    <div className='flex items-center gap-1 bg-card border border-border rounded-lg p-1'>
+      <button
+        onClick={() => handleThemeChange('light')}
+        className={`p-2 rounded-md transition-all duration-200 cursor-pointer ${
+          nextTheme === 'light'
+            ? 'bg-primary/10 text-primary'
+            : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+        }`}
+        title='Light mode'
+      >
+        <Sun className='h-4 w-4' />
+      </button>
+
+      <button
+        onClick={() => handleThemeChange('dark')}
+        className={`p-2 rounded-md transition-all duration-200 cursor-pointer ${
+          nextTheme === 'dark'
+            ? 'bg-primary/10 text-primary'
+            : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+        }`}
+        title='Dark mode'
+      >
+        <Moon className='h-4 w-4' />
+      </button>
+    </div>
+  )
+}

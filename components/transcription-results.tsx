@@ -1,11 +1,11 @@
 'use client'
 
-import { Download, Copy, Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Switch } from '@/components/ui/switch'
-import { Label } from '@/components/ui/label'
+import { Check, Copy, Download } from 'lucide-react'
 import { useState } from 'react'
 
 interface TranscriptionResultsProps {
@@ -24,10 +24,9 @@ export function TranscriptionResults({ result, isTranscribing }: TranscriptionRe
         /\[(\d{2}:\d{2}:\d{2})\.\d{3} --> (\d{2}:\d{2}:\d{2})\.\d{3}\]/g,
         '[$1 --> $2]'
       )
-    } else {
-      // Remove entire timestamp lines
-      return text.replace(/\[\d{2}:\d{2}:\d{2}\.\d{3} --> \d{2}:\d{2}:\d{2}\.\d{3}\]\n?/g, '')
     }
+    // Remove entire timestamp lines
+    return text.replace(/\[\d{2}:\d{2}:\d{2}\.\d{3} --> \d{2}:\d{2}:\d{2}\.\d{3}\]\n?/g, '')
   }
 
   const handleDownload = () => {

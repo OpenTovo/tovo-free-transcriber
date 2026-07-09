@@ -11,7 +11,7 @@ export const resolvedThemeAtom = atom(get => {
 })
 
 // Actions for theme management
-export const setThemeAtom = atom(null, (get, set, newTheme: 'light' | 'dark') => {
+export const setThemeAtom = atom(null, (_get, set, newTheme: 'light' | 'dark') => {
   set(themeAtom, newTheme)
 })
 

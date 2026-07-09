@@ -5,7 +5,9 @@ import { DEFAULT_MODEL, estimateTranscriptionTime } from './whisper-models'
 // Global module interface for the loaded WASM
 declare global {
   interface Window {
+    // biome-ignore lint/suspicious/noExplicitAny: WASM module interface
     Module: any
+    webkitAudioContext?: typeof AudioContext
   }
 }
 
@@ -15,6 +17,7 @@ interface WhisperModule {
   _malloc: (size: number) => number
   _free: (ptr: number) => void
   onRuntimeInitialized?: () => void
+  // biome-ignore lint/suspicious/noExplicitAny: WASM abort callback parameter
   onAbort?: (what: any) => void
   locateFile?: (path: string) => string
 
@@ -33,6 +36,7 @@ interface WhisperModule {
   free: (index: number) => void // Free context at index (1-based)
   full_default: (
     index: number, // Context index (1-based)
+    // biome-ignore lint/suspicious/noExplicitAny: WASM audio constructor type
     audio: { length: number; constructor: any }, // Audio data
     lang: string, // Language code
     nthreads: number, // Number of threads
@@ -43,10 +47,10 @@ interface WhisperModule {
 export class WhisperWASM {
   private module: WhisperModule | null = null
   private instance: number | null = null
-  private transcriptionResult: string = ''
-  private modelFileName: string = ''
-  private isTranscribing: boolean = false
-  private isComplete: boolean = false
+  private transcriptionResult = ''
+  private modelFileName = ''
+  private isTranscribing = false
+  private isComplete = false
   private onProgress?: (result: string) => void
 
   async loadModule(): Promise<void> {
@@ -75,7 +79,7 @@ export class WhisperWASM {
           if (this.isTranscribing) {
             // Look for timestamp lines to accumulate transcription
             if (text.includes('[') && text.includes(']') && text.includes('-->')) {
-              this.transcriptionResult += text + '\n'
+              this.transcriptionResult += `${text}\n`
               // Show result immediately as segments come in
               if (this.onProgress) {
                 this.onProgress(this.transcriptionResult.trim())
@@ -96,6 +100,7 @@ export class WhisperWASM {
         },
         onRuntimeInitialized: () => {
           console.log('✅ WASM module loaded successfully')
+          // biome-ignore lint/suspicious/noExplicitAny: accessing global WASM module
           this.module = (window as any).Module as WhisperModule
           resolve()
         },
@@ -103,7 +108,7 @@ export class WhisperWASM {
           if (path.endsWith('.wasm')) {
             return '/wasm/whisper.wasm'
           }
-          return '/wasm/' + path
+          return `/wasm/${path}`
         },
       }
 
@@ -135,7 +140,7 @@ export class WhisperWASM {
       // Remove existing file if it exists (like in index-tmpl.html storeFS function)
       try {
         module.FS_unlink(modelPath)
-      } catch (e) {
+      } catch (_e) {
         // File doesn't exist, which is fine
       }
 
@@ -276,7 +281,7 @@ export class WhisperWASM {
 // Utility function to convert audio file to Float32Array
 export async function audioFileToFloat32Array(file: File): Promise<Float32Array> {
   return new Promise((resolve, reject) => {
-    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)()
 
     const reader = new FileReader()
     reader.onload = async e => {

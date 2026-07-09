@@ -146,7 +146,7 @@ class WhisperModelManager {
         throw new Error(`Failed to download model: ${response.statusText}`)
       }
 
-      const contentLength = parseInt(response.headers.get('Content-Length') || '0')
+      const contentLength = Number.parseInt(response.headers.get('Content-Length') || '0')
       const reader = response.body?.getReader()
 
       if (!reader) {
@@ -263,11 +263,11 @@ class WhisperModelManager {
     try {
       const models = await db.getAll('models')
 
-      const totalSize = models.reduce((sum: number, model: any) => sum + model.size, 0)
+      const totalSize = models.reduce((sum: number, model) => sum + model.size, 0)
 
       return {
         totalSize,
-        models: models.map((model: any) => ({
+        models: models.map(model => ({
           name: model.name,
           size: model.size,
           downloadedAt: model.downloadedAt,

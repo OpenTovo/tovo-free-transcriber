@@ -2,14 +2,18 @@
   "name": "tovo-free-transcriber",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@11.5.1",
   "scripts": {
     "dev": "next dev --turbopack --port 3006 --experimental-https --experimental-https-key ./certs/key.pem --experimental-https-cert ./certs/cert.pem",
     "dev:http": "next dev --turbopack --port 3006",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --write .",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "check": "biome check --write .",
+    "check:ci": "biome ci .",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv ./cloudflare-env.d.ts"
@@ -58,33 +62,15 @@
     "zod": "^4.0.10"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.5",
-    "@opennextjs/cloudflare": "1.19.10",
+    "@biomejs/biome": "^1.9.4",
+    "@opennextjs/cloudflare": "^1.19.11",
     "@tailwindcss/postcss": "^4.3.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^9.39.4",
-    "eslint-config-next": "15.5.18",
-    "prettier": "^3.6.2",
     "tailwindcss": "^4.3.0",
     "tw-animate-css": "^1.3.6",
     "typescript": "^5",
-    "wrangler": "4.86.0"
-  },
-  "pnpm": {
-    "overrides": {
-      "flatted": "3.4.2",
-      "path-to-regexp@8": "8.4.2",
-      "fast-xml-builder": "1.2.0",
-      "postcss": "8.5.10",
-      "minimatch@3": "3.1.5",
-      "minimatch@8": "8.0.7",
-      "minimatch@9": "9.0.9",
-      "picomatch@2": "2.3.2",
-      "picomatch@4": "4.0.4",
-      "brace-expansion@1": "1.1.14",
-      "brace-expansion@2": "2.0.3"
-    }
+    "wrangler": "^4.102.0"
   }
 }

@@ -1,10 +1,8 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
 import { FileUpload } from '@/components/file-upload'
 import { TranscriptionResults } from '@/components/transcription-results'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { Button } from '@/components/ui/button'
 import {
   Select,
   SelectContent,
@@ -12,18 +10,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { FileText, Languages } from 'lucide-react'
-import { WhisperWASM, audioFileToFloat32Array } from '@/lib/whisper-wasm'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { playErrorSound, playSuccessSound } from '@/lib/sound'
 import {
-  WhisperModelKey,
-  whisperModelManager,
   DEFAULT_MODEL,
-  getModelSizeMB,
-  estimateTranscriptionTime,
   MAX_DURATION_SECONDS,
+  type WhisperModelKey,
+  estimateTranscriptionTime,
+  getModelSizeMB,
+  whisperModelManager,
 } from '@/lib/whisper-models'
+import { WhisperWASM, audioFileToFloat32Array } from '@/lib/whisper-wasm'
+import { FileText, Languages } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
-import { playSuccessSound, playErrorSound } from '@/lib/sound'
 
 type TranscriptionState = 'idle' | 'loading-wasm' | 'loading-model' | 'transcribing' | 'done'
 
@@ -34,7 +34,7 @@ export default function TranscriptionInterface() {
   const [progress, setProgress] = useState(0)
   const [currentModel, setCurrentModel] = useState<WhisperModelKey | null>(null)
   const [audioDuration, setAudioDuration] = useState<number>(0)
-  const [estimatedTime, setEstimatedTime] = useState<number>(0)
+  const [_estimatedTime, setEstimatedTime] = useState<number>(0)
   const [remainingTime, setRemainingTime] = useState<number>(0)
   const [translateToEnglish, setTranslateToEnglish] = useState<boolean>(false)
   const whisperRef = useRef<WhisperWASM | null>(null)
@@ -168,7 +168,7 @@ export default function TranscriptionInterface() {
         }
 
         // Initialize the model in WASM
-        await whisperRef.current!.initializeModel(modelData)
+        await whisperRef.current?.initializeModel(modelData)
         setCurrentModel(DEFAULT_MODEL)
       } else {
         // Model already exists, just load it into WASM if not already initialized
@@ -181,7 +181,7 @@ export default function TranscriptionInterface() {
         }
 
         // Initialize the model in WASM
-        await whisperRef.current!.initializeModel(modelData)
+        await whisperRef.current?.initializeModel(modelData)
       }
 
       // Step 3: Transcribe
@@ -208,7 +208,7 @@ export default function TranscriptionInterface() {
       // Run transcription
       console.log('🗣️ Starting transcription...')
 
-      const result = await whisperRef.current!.transcribe(audioData, {
+      const result = await whisperRef.current?.transcribe(audioData, {
         language: 'auto',
         translate: translateToEnglish,
         onProgress: (partialResult: string) => {
@@ -261,18 +261,20 @@ export default function TranscriptionInterface() {
   const isTranscribing = transcriptionState !== 'idle' && transcriptionState !== 'done'
 
   return (
-    <div className='w-full max-w-4xl mx-auto space-y-4 md:space-y-6 p-4 md:p-6'>
-      {/* Apple-style liquid glass card container */}
-      <div className='bg-white/60 dark:bg-gray-900/60 backdrop-blur-2xl rounded-3xl border border-white/30 dark:border-gray-700/60 shadow-xl dark:shadow-2xl p-4 md:p-6 space-y-4 md:space-y-6'>
+    <div className='w-full max-w-3xl mx-auto space-y-5 md:space-y-6'>
+      {/* Glass card container */}
+      <div className='glass-strong rounded-2xl shadow-lg p-6 md:p-8 space-y-5 md:space-y-6'>
         {/* Hero Section */}
-        <div className='text-center space-y-2 md:space-y-3'>
-          <h1 className='text-2xl md:text-4xl font-bold tracking-tight bg-gradient-to-r from-gray-800 to-gray-600 dark:from-white dark:via-gray-100 dark:to-gray-300 bg-clip-text text-transparent'>
-            Free Transcription
+        <div className='text-center space-y-3'>
+          <h1 className='text-3xl md:text-4xl font-bold tracking-tight'>
+            Free <span className='text-zima'>Transcription</span>
           </h1>
-          <p className='text-sm md:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed px-2'>
-            Transcribe audio and video files locally in the browser. Private, no sign-up, and always
+          <p className='text-sm md:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed'>
+            Transcribe audio and video files locally in your browser. Private, no sign-up, and
+            always
             <span className='text-emerald-600 dark:text-emerald-400 font-semibold'> FREE</span>.
           </p>
+          <div className='gradient-line w-32 mx-auto' />
         </div>
 
         {/* File Upload */}
@@ -285,12 +287,9 @@ export default function TranscriptionInterface() {
 
         {/* Translation Options */}
         {selectedFile && (
-          <div className='flex justify-center px-4'>
+          <div className='flex justify-center'>
             <div className='flex items-center gap-3'>
-              <label
-                htmlFor='translate-select'
-                className='text-sm font-medium text-gray-700 dark:text-gray-300'
-              >
+              <label htmlFor='translate-select' className='text-sm font-medium text-foreground'>
                 Output:
               </label>
               <Select
@@ -322,7 +321,7 @@ export default function TranscriptionInterface() {
 
         {/* Transcribe Button */}
         {selectedFile && (
-          <div className='flex justify-center px-4'>
+          <div className='flex justify-center'>
             {!currentModel ? (
               <TooltipProvider>
                 <Tooltip>
@@ -331,15 +330,12 @@ export default function TranscriptionInterface() {
                       onClick={handleTranscribe}
                       disabled={isTranscribing}
                       size='lg'
-                      className='w-full max-w-xs md:w-auto px-6 md:px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 border-0 shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 text-white font-semibold'
+                      className='w-full max-w-xs md:w-auto px-6 md:px-8 py-3 bg-primary hover:bg-primary/90 border-0 shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 text-white font-semibold'
                     >
                       {getButtonText()}
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent
-                    side='top'
-                    className='bg-black/80 backdrop-blur-md border border-white/20 text-sm text-gray-200 w-70'
-                  >
+                  <TooltipContent side='top' className='max-w-72 text-sm'>
                     First time? We'll download a ~{getModelSizeMB(DEFAULT_MODEL)}MB model to your
                     browser. It'll be cached locally for faster future transcriptions!
                   </TooltipContent>
@@ -350,7 +346,7 @@ export default function TranscriptionInterface() {
                 onClick={handleTranscribe}
                 disabled={isTranscribing}
                 size='lg'
-                className='w-full max-w-xs md:w-auto px-6 md:px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 border-0 shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 text-white font-semibold'
+                className='w-full max-w-xs md:w-auto px-6 md:px-8 py-3 bg-primary hover:bg-primary/90 border-0 shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 text-white font-semibold'
               >
                 {getButtonText()}
               </Button>

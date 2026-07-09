@@ -1,20 +1,21 @@
 export default function Footer() {
   return (
-    <footer className='border-t border-white/20 dark:border-gray-800/80 bg-white/40 dark:bg-black/30 backdrop-blur-3xl supports-[backdrop-filter]:bg-white/40 dark:supports-[backdrop-filter]:bg-black/30 shadow-sm dark:shadow-lg backdrop-saturate-150'>
-      <div className='container flex h-14 max-w-screen-2xl items-center justify-between px-4 md:px-6 text-sm'>
-        <div className='flex items-center space-x-4 text-gray-600 dark:text-gray-300'>
-          <span className='font-medium'>© 2025 Tovo</span>
-          <span className='text-xs text-gray-400 dark:text-gray-500'>•</span>
+    <footer className='mt-auto'>
+      <div className='gradient-line mb-4' />
+      <div className='flex flex-col sm:flex-row items-center justify-between gap-3 py-4 text-sm'>
+        <div className='flex items-center gap-3 text-muted-foreground'>
+          <span className='font-medium'>© {new Date().getFullYear()} Tovo</span>
+          <span className='text-border'>•</span>
           <a
             href='mailto:support@tovo.dev'
-            className='text-xs hover:text-blue-600 dark:hover:text-blue-300 transition-colors cursor-pointer'
+            className='text-xs hover:text-zima transition-colors cursor-pointer'
           >
             Contact
           </a>
-          <span className='text-xs text-gray-400 dark:text-gray-500'>•</span>
+          <span className='text-border'>•</span>
           <a
             href='https://www.tovo.dev'
-            className='text-xs hover:text-blue-600 dark:hover:text-blue-300 transition-colors cursor-pointer'
+            className='text-xs hover:text-zima transition-colors cursor-pointer'
             target='_blank'
             rel='noopener noreferrer'
           >
@@ -22,12 +23,12 @@ export default function Footer() {
           </a>
         </div>
 
-        <div className='hidden md:flex items-center space-x-4 text-gray-500 dark:text-gray-400'>
+        <div className='hidden md:flex items-center gap-3 text-muted-foreground/80'>
           <span className='text-xs font-medium'>Multilingual</span>
-          <span className='text-xs text-gray-400 dark:text-gray-500'>•</span>
-          <span className='text-xs font-medium'>No sign-up required</span>
-          <span className='text-xs text-gray-400 dark:text-gray-500'>•</span>
-          <span className='text-xs font-medium'>100% Local Processing</span>
+          <span className='text-border'>•</span>
+          <span className='text-xs font-medium'>No sign-up</span>
+          <span className='text-border'>•</span>
+          <span className='text-xs font-medium'>100% Local</span>
         </div>
       </div>
     </footer>

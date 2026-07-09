@@ -1,4 +1,4 @@
-import { openDB, DBSchema, IDBPDatabase } from 'idb'
+import { type DBSchema, type IDBPDatabase, openDB } from 'idb'
 
 // Database schema for the entire application
 export interface AppDB extends DBSchema {
@@ -52,12 +52,12 @@ class DatabaseManager {
 
     if (!this.dbPromise) {
       this.dbPromise = openDB<AppDB>(DB_NAME, DB_VERSION, {
-        upgrade(db, oldVersion, newVersion, transaction) {
+        upgrade(db, oldVersion, newVersion, _transaction) {
           console.log(`Upgrading database from ${oldVersion} to ${newVersion}`)
 
           // Create models store
           if (!db.objectStoreNames.contains('models')) {
-            const modelsStore = db.createObjectStore('models', { keyPath: 'name' })
+            const _modelsStore = db.createObjectStore('models', { keyPath: 'name' })
             console.log('Created models store')
           }
 
@@ -92,11 +92,13 @@ class DatabaseManager {
     key: AppDB[T]['key']
   ): Promise<AppDB[T]['value'] | undefined> {
     const db = await this.getDB()
+    // biome-ignore lint/suspicious/noExplicitAny: idb generic store name typing
     return db.get(storeName as any, key)
   }
 
   async getAll<T extends keyof AppDB>(storeName: T): Promise<AppDB[T]['value'][]> {
     const db = await this.getDB()
+    // biome-ignore lint/suspicious/noExplicitAny: idb generic store name typing
     return db.getAll(storeName as any)
   }
 
@@ -105,20 +107,24 @@ class DatabaseManager {
     value: AppDB[T]['value']
   ): Promise<AppDB[T]['key']> {
     const db = await this.getDB()
+    // biome-ignore lint/suspicious/noExplicitAny: idb generic store name typing
     return db.put(storeName as any, value)
   }
 
   async delete<T extends keyof AppDB>(storeName: T, key: AppDB[T]['key']): Promise<void> {
     const db = await this.getDB()
+    // biome-ignore lint/suspicious/noExplicitAny: idb generic store name typing
     return db.delete(storeName as any, key)
   }
 
   async transaction<T extends keyof AppDB>(
     storeNames: T[],
     mode: IDBTransactionMode,
+    // biome-ignore lint/suspicious/noExplicitAny: idb transaction callback typing
     callback: (tx: any) => Promise<void>
   ): Promise<void> {
     const db = await this.getDB()
+    // biome-ignore lint/suspicious/noExplicitAny: idb generic store name typing
     const tx = db.transaction(storeNames as any, mode)
     await callback(tx)
     await tx.done

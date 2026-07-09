@@ -1,13 +1,13 @@
 'use client'
 
+import { themeAtom } from '@/lib/atoms'
 import { useAtom } from 'jotai'
+import { Moon, Sun } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
-import { Moon, Sun } from 'lucide-react'
-import { themeAtom } from '@/lib/atoms'
 
 export function ThemeToggle() {
-  const [currentTheme, setTheme] = useAtom(themeAtom)
+  const [_currentTheme, setTheme] = useAtom(themeAtom)
   const { setTheme: setNextTheme, theme: nextTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
@@ -26,8 +26,8 @@ export function ThemeToggle() {
   if (!mounted) {
     return (
       <div className='flex items-center space-x-1 bg-white/30 dark:bg-black/20 backdrop-blur-xl rounded-xl p-1 border border-white/40 dark:border-gray-800/60 shadow-md backdrop-saturate-150'>
-        <div className='p-2 rounded-lg w-8 h-8'></div>
-        <div className='p-2 rounded-lg w-8 h-8'></div>
+        <div className='p-2 rounded-lg w-8 h-8' />
+        <div className='p-2 rounded-lg w-8 h-8' />
       </div>
     )
   }
@@ -35,6 +35,7 @@ export function ThemeToggle() {
   return (
     <div className='flex items-center space-x-1 bg-white/30 dark:bg-black/20 backdrop-blur-xl rounded-xl p-1 border border-white/40 dark:border-gray-800/60 shadow-md backdrop-saturate-150'>
       <button
+        type='button'
         onClick={() => handleThemeChange('light')}
         className={`p-2 rounded-lg transition-all duration-300 cursor-pointer ${
           nextTheme === 'light'
@@ -47,6 +48,7 @@ export function ThemeToggle() {
       </button>
 
       <button
+        type='button'
         onClick={() => handleThemeChange('dark')}
         className={`p-2 rounded-lg transition-all duration-300 cursor-pointer ${
           nextTheme === 'dark'
