@@ -1,10 +1,10 @@
 'use client'
 
-import { themeAtom } from '@/lib/atoms'
 import { useAtom } from 'jotai'
 import { Moon, Sun } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
+import { themeAtom } from '@/lib/atoms'
 
 export function ThemeToggle() {
   const [_currentTheme, setTheme] = useAtom(themeAtom)

@@ -1,10 +1,10 @@
 'use client'
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 
 const faqData = [
   {
@@ -259,7 +259,7 @@ export default function DocsPage() {
 
         {/* FAQ Sections */}
         {faqData.map((category, categoryIndex) => (
-          <Card key={categoryIndex} className='mb-6'>
+          <Card key={category.category} className='mb-6'>
             <CardHeader>
               <CardTitle className='text-xl'>{category.category}</CardTitle>
             </CardHeader>
@@ -269,7 +269,7 @@ export default function DocsPage() {
                 const isOpen = openItems.includes(id)
 
                 return (
-                  <Collapsible key={itemIndex}>
+                  <Collapsible key={item.question}>
                     <CollapsibleTrigger
                       onClick={() => toggleItem(id)}
                       className='flex items-center justify-between w-full p-4 text-left bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer'

@@ -1,5 +1,8 @@
 'use client'
 
+import { FileText, Languages } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { toast } from 'sonner'
 import { FileUpload } from '@/components/file-upload'
 import { TranscriptionResults } from '@/components/transcription-results'
 import { Button } from '@/components/ui/button'
@@ -14,16 +17,13 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { playErrorSound, playSuccessSound } from '@/lib/sound'
 import {
   DEFAULT_MODEL,
-  MAX_DURATION_SECONDS,
-  type WhisperModelKey,
   estimateTranscriptionTime,
   getModelSizeMB,
+  MAX_DURATION_SECONDS,
+  type WhisperModelKey,
   whisperModelManager,
 } from '@/lib/whisper-models'
-import { WhisperWASM, audioFileToFloat32Array } from '@/lib/whisper-wasm'
-import { FileText, Languages } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
-import { toast } from 'sonner'
+import { audioFileToFloat32Array, WhisperWASM } from '@/lib/whisper-wasm'
 
 type TranscriptionState = 'idle' | 'loading-wasm' | 'loading-model' | 'transcribing' | 'done'
 

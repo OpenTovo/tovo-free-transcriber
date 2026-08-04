@@ -128,7 +128,10 @@ export class WhisperWASM {
 
   async initializeModel(modelData: Uint8Array): Promise<void> {
     await this.loadModule()
-    const module = this.module!
+    const module = this.module
+    if (!module) {
+      throw new Error('WASM module failed to initialize')
+    }
 
     console.log(`📦 Initializing model from memory (${modelData.length} bytes)`)
 

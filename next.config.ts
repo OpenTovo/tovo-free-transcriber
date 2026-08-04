@@ -5,27 +5,6 @@ const nextConfig: NextConfig = {
   // Allow cross-origin requests from local network devices for development
   allowedDevOrigins: ['192.168.2.*', '192.168.2.*:3006'],
 
-  // Exclude whisper.cpp build files from compilation
-  webpack: (config, { isServer }) => {
-    // Exclude whisper.cpp build directory and other non-source files
-    config.module.rules.push({
-      test: /\.(ts|tsx|js|jsx)$/,
-      exclude: [/node_modules/, /whisper\.cpp/],
-    })
-
-    // Also exclude these from being processed as modules at all
-    config.resolve.alias = {
-      ...config.resolve.alias,
-    }
-
-    // Ignore these files completely
-    config.watchOptions = {
-      ...config.watchOptions,
-      ignored: ['**/node_modules/**', '**/whisper.cpp/**'],
-    }
-
-    return config
-  },
   async headers() {
     return [
       {
@@ -102,4 +81,5 @@ export default nextConfig
 
 // added by create cloudflare to enable calling `getCloudflareContext()` in `next dev`
 import { initOpenNextCloudflareForDev } from '@opennextjs/cloudflare'
+
 initOpenNextCloudflareForDev()

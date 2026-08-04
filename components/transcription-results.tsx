@@ -1,12 +1,12 @@
 'use client'
 
+import { Check, Copy, Download } from 'lucide-react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Switch } from '@/components/ui/switch'
-import { Check, Copy, Download } from 'lucide-react'
-import { useState } from 'react'
 
 interface TranscriptionResultsProps {
   result: string

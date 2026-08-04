@@ -1,7 +1,7 @@
 'use client'
 
+import { useCallback, useEffect, useState } from 'react'
 import { WHISPER_MODELS, type WhisperModelKey, whisperModelManager } from '@/lib/whisper-models'
-import { useEffect, useState } from 'react'
 
 interface ModelDownloadProps {
   onModelReady?: (modelKey: WhisperModelKey, modelData: Uint8Array) => void
@@ -17,28 +17,28 @@ export default function ModelDownload({ onModelReady }: ModelDownloadProps) {
   }>({ totalSize: 0, models: [] })
 
   // Load downloaded models on component mount
-  useEffect(() => {
-    loadDownloadedModels()
-    loadStorageInfo()
-  }, [])
-
-  const loadDownloadedModels = async () => {
+  const loadDownloadedModels = useCallback(async () => {
     try {
       const models = await whisperModelManager.getDownloadedModels()
       setDownloadedModels(models)
     } catch (error) {
       console.error('Error loading downloaded models:', error)
     }
-  }
+  }, [])
 
-  const loadStorageInfo = async () => {
+  const loadStorageInfo = useCallback(async () => {
     try {
       const info = await whisperModelManager.getStorageInfo()
       setStorageInfo(info)
     } catch (error) {
       console.error('Error loading storage info:', error)
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    loadDownloadedModels()
+    loadStorageInfo()
+  }, [loadDownloadedModels, loadStorageInfo])
 
   const downloadModel = async (modelKey: WhisperModelKey) => {
     try {

@@ -146,7 +146,7 @@ class WhisperModelManager {
         throw new Error(`Failed to download model: ${response.statusText}`)
       }
 
-      const contentLength = Number.parseInt(response.headers.get('Content-Length') || '0')
+      const contentLength = Number.parseInt(response.headers.get('Content-Length') || '0', 10)
       const reader = response.body?.getReader()
 
       if (!reader) {

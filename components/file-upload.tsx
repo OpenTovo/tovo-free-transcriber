@@ -1,9 +1,9 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
 import { File, Music, Upload, Video, X } from 'lucide-react'
 import { useCallback, useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 interface FileUploadProps {
   onFileSelect: (file: File) => void
@@ -64,7 +64,7 @@ export function FileUpload({
   const [isDragOver, setIsDragOver] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const validateFile = (file: File): string | null => {
+  const validateFile = useCallback((file: File): string | null => {
     if (!ALL_SUPPORTED_TYPES.includes(file.type)) {
       return 'Unsupported file format. Please select an audio or video file.'
     }
@@ -76,7 +76,7 @@ export function FileUpload({
     }
 
     return null
-  }
+  }, [])
 
   const handleFileSelect = useCallback(
     (file: File) => {
@@ -90,7 +90,7 @@ export function FileUpload({
 
       onFileSelect(file)
     },
-    [onFileSelect]
+    [onFileSelect, validateFile]
   )
 
   const handleDrop = useCallback(
@@ -183,9 +183,6 @@ export function FileUpload({
             : 'border-white/40 dark:border-gray-800/50 hover:border-blue-500/40 hover:bg-white/40 dark:hover:bg-black/20',
           isTranscribing && 'opacity-50 cursor-not-allowed'
         )}
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
       >
         <input
           id='file-input'
@@ -194,6 +191,9 @@ export function FileUpload({
           onChange={handleInputChange}
           className='absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10'
           disabled={isTranscribing}
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
         />
 
         <div className='space-y-4'>

@@ -15,6 +15,7 @@
 
 # production
 /build
+/.build
 
 # misc
 .DS_Store
@@ -44,8 +45,3 @@ next-env.d.ts
 
 # Generated model files (local copies)
 /scripts/models/
-
-# deployment scripts
-/scripts/ops.sh
-/scripts/upload-to-r2.sh
-/scripts/README.md
