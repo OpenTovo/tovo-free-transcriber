@@ -1,7 +1,7 @@
-# TOVO Free Transcriber - LLM Information
+# Tovo Free Transcriber - LLM Information
 
 ## Overview
-TOVO Free Transcriber is a completely free, privacy-focused audio and video transcription service that runs entirely in your browser. No sign-up required, no file uploads to servers, and completely private processing.
+Tovo Free Transcriber is a completely free, privacy-focused audio and video transcription service that runs entirely in your browser. No sign-up required, no file uploads to servers, and completely private processing.
 
 ## Key Features
 - **100% Browser-based**: Uses whisper.cpp WASM for client-side processing

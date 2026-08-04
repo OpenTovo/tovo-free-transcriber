@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'TOVO Free Transcriber - Convert Audio & Video to Text Online',
+  title: 'Tovo Free Transcriber - Convert Audio & Video to Text Online',
   description:
     'Free online audio and video transcription tool. Convert speech to text, transcribe podcasts, interviews, meetings, lectures, and voice recordings. No signup required, works offline in your browser.',
   keywords: [
@@ -49,20 +49,20 @@ export const metadata: Metadata = {
     'free speech recognition',
     'multilingual transcription',
   ],
-  authors: [{ name: 'TOVO' }],
-  creator: 'TOVO',
-  publisher: 'TOVO',
+  authors: [{ name: 'Tovo' }],
+  creator: 'Tovo',
+  publisher: 'Tovo',
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
   openGraph: {
-    title: 'TOVO Free Transcriber - Convert Audio & Video to Text',
+    title: 'Tovo Free Transcriber - Convert Audio & Video to Text',
     description:
       'Free online transcription tool for audio and video files. Convert speech to text with AI-powered accuracy. No signup required, works offline.',
     url: 'https://transcribe.tovo.dev',
-    siteName: 'TOVO Free Transcriber',
+    siteName: 'Tovo Free Transcriber',
     locale: 'en_US',
     type: 'website',
     images: [
@@ -70,13 +70,13 @@ export const metadata: Metadata = {
         url: '/tovo-logo-512.png',
         width: 512,
         height: 512,
-        alt: 'TOVO Free Transcriber Logo',
+        alt: 'Tovo Free Transcriber Logo',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'TOVO Free Transcriber - Convert Audio & Video to Text',
+    title: 'Tovo Free Transcriber - Convert Audio & Video to Text',
     description:
       'Free online transcription tool for audio and video files. Convert speech to text with AI-powered accuracy.',
     images: ['/tovo-logo-512.png'],
@@ -107,7 +107,7 @@ export const metadata: Metadata = {
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
-  name: 'TOVO Free Transcriber',
+  name: 'Tovo Free Transcriber',
   applicationCategory: 'MultimediaApplication',
   description:
     'Free online audio and video transcription tool. Convert speech to text, transcribe podcasts, interviews, meetings, lectures, and voice recordings.',
@@ -145,7 +145,7 @@ const structuredData = {
   browserRequirements: 'Requires JavaScript. Works with Chrome, Firefox, Safari, Edge.',
   creator: {
     '@type': 'Organization',
-    name: 'TOVO',
+    name: 'Tovo',
   },
   mainEntity: {
     '@type': 'SoftwareApplication',

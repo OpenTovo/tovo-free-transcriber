@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Free Audio & Video Transcription Guide - FAQ & Help | TOVO Transcriber',
+  title: 'Free Audio & Video Transcription Guide - FAQ & Help | Tovo Transcriber',
   description:
     'Complete guide to free, private audio and video transcription. Learn how to transcribe lectures, meetings, interviews, and podcasts using AI-powered speech recognition.',
   keywords:
