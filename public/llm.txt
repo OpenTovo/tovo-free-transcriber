@@ -8,7 +8,7 @@ Tovo Free Transcriber is a completely free, privacy-focused audio and video tran
 - **Privacy First**: All processing happens locally, files never leave your device
 - **No Sign-up Required**: Instant access without registration
 - **Free Forever**: No hidden costs, subscriptions, or limits
-- **Multi-format Support**: Audio files (MP3, WAV, M4A, FLAC) and video files (MP4, MOV, AVI, WebM)
+- **Multi-format Support**: Audio files (MP3, WAV, M4A, FLAC, OGG, OPUS) and video files (MP4, MOV, AVI, WebM, MKV)
 - **Translation**: Can translate foreign audio to English
 - **Offline Capable**: Works without internet after initial model download
 
@@ -24,7 +24,7 @@ Tovo Free Transcriber is a completely free, privacy-focused audio and video tran
 ## Technical Details
 - Built with Next.js 15 and deployed on Cloudflare Pages
 - Uses OpenAI's Whisper model via whisper.cpp WebAssembly
-- Supports multiple Whisper model sizes (tiny, base, small, medium)
+- Supports multiple Whisper model sizes (tiny, base, small)
 - Real-time transcription progress with time estimates
 - Cross-origin isolation for optimal performance
 - IndexedDB storage for downloaded models

@@ -38,7 +38,8 @@
     "rules": {
       "preset": "recommended",
       "complexity": {
-        "noForEach": "off"
+        "noForEach": "off",
+        "noImportantStyles": "off"
       },
       "correctness": {
         "noUnusedVariables": "warn",

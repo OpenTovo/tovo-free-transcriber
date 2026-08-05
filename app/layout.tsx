@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { GoogleAnalytics } from '@next/third-parties/google'
@@ -99,15 +99,15 @@ export const metadata: Metadata = {
     },
   },
   manifest: '/manifest.json',
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#000000' },
+    { media: '(prefers-color-scheme: light)', color: '#fbfbf9' },
+    { media: '(prefers-color-scheme: dark)', color: '#101214' },
   ],
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-  },
 }
 
 const structuredData = {
@@ -160,7 +160,7 @@ const structuredData = {
     operatingSystem: 'Web Browser',
     softwareVersion: '1.0',
     downloadUrl: 'https://transcribe.tovo.dev',
-    screenshot: 'https://transcribe.tovo.dev/tovo-logo-512.png',
+    screenshot: 'https://transcribe.tovo.dev/opengraph-image',
   },
 }
 

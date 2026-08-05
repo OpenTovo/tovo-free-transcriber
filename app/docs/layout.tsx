@@ -1,4 +1,6 @@
 import type { Metadata, Viewport } from 'next'
+import Footer from '@/components/footer'
+import Header from '@/components/header'
 
 export const metadata: Metadata = {
   title: 'Free Audio & Video Transcription Guide - FAQ & Help | Tovo Transcriber',
@@ -17,13 +19,18 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#000000' },
+    { media: '(prefers-color-scheme: light)', color: '#fbfbf9' },
+    { media: '(prefers-color-scheme: dark)', color: '#101214' },
   ],
 }
 
 export default function DocsLayout({ children }: { children: React.ReactNode }) {
-  return children
+  return (
+    <div className='min-h-screen flex flex-col bg-background'>
+      <Header />
+      <main className='flex-1'>{children}</main>
+      <Footer />
+    </div>
+  )
 }

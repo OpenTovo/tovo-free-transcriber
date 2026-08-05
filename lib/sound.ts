@@ -2,7 +2,28 @@
  * Utility for playing notification sounds using Web Audio API
  */
 
+const SOUNDS_ENABLED_KEY = 'tovo-transcriber-sounds'
+
 let audioContext: AudioContext | null = null
+
+/**
+ * Sound preference — on by default, persisted in localStorage
+ */
+export function isSoundEnabled(): boolean {
+  try {
+    return localStorage.getItem(SOUNDS_ENABLED_KEY) !== 'off'
+  } catch {
+    return true
+  }
+}
+
+export function setSoundEnabled(enabled: boolean): void {
+  try {
+    localStorage.setItem(SOUNDS_ENABLED_KEY, enabled ? 'on' : 'off')
+  } catch {
+    // Ignore storage errors (private mode etc.)
+  }
+}
 
 /**
  * Get or create AudioContext (lazy initialization)
@@ -30,6 +51,8 @@ function getAudioContext(): AudioContext | null {
  * Creates a gentle two-tone chime using oscillators
  */
 export function playSuccessSound(): void {
+  if (!isSoundEnabled()) return
+
   const context = getAudioContext()
   if (!context) return
 
@@ -80,6 +103,8 @@ export function playSuccessSound(): void {
  * Creates a lower, more subdued tone
  */
 export function playErrorSound(): void {
+  if (!isSoundEnabled()) return
+
   const context = getAudioContext()
   if (!context) return
 

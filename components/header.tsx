@@ -1,26 +1,31 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { ThemeToggle } from './theme-toggle'
 
 export default function Header() {
   return (
-    <header className='border-b border-white/20 dark:border-gray-800/80 bg-white/40 dark:bg-black/30 backdrop-blur-3xl supports-[backdrop-filter]:bg-white/40 dark:supports-[backdrop-filter]:bg-black/30 shadow-sm dark:shadow-lg backdrop-saturate-150'>
-      <div className='mx-auto flex h-16 w-full max-w-screen-2xl items-center justify-between px-4 sm:px-6 lg:px-8'>
-        <div className='flex items-center space-x-3'>
-          <Link
-            href='/'
-            className='text-xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent hover:opacity-80 transition-opacity'
-          >
-            Free Transcriber
+    <header className='border-b border-border bg-background/72 backdrop-blur-xl'>
+      <div className='mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-8'>
+        <div className='flex items-center gap-2.5'>
+          <Link href='/' className='flex items-center gap-2.5'>
+            <Image
+              src='/tovo-icon.png'
+              alt='Tovo Free Transcriber logo'
+              width={28}
+              height={28}
+              className='rounded-md'
+            />
+            <span className='text-[15px] font-semibold tracking-tight'>Free Transcriber</span>
           </Link>
-          <span className='hidden md:inline-block text-xs font-medium text-emerald-600 dark:text-emerald-300 bg-emerald-100/80 dark:bg-emerald-500/20 px-3 py-1 rounded-full border border-emerald-200 dark:border-emerald-500/30 backdrop-blur-sm'>
+          <span className='hidden md:inline-block text-[11px] font-semibold uppercase tracking-wide text-brand-soft-foreground bg-brand-soft px-2.5 py-1 rounded-full'>
             Local & Private
           </span>
         </div>
 
-        <div className='flex items-center space-x-4'>
+        <div className='flex items-center gap-1'>
           <Link
             href='/docs'
-            className='text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors'
+            className='text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-lg px-3 py-2'
           >
             Help & FAQ
           </Link>

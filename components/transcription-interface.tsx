@@ -6,6 +6,7 @@ import { toast } from 'sonner'
 import { FileUpload } from '@/components/file-upload'
 import { TranscriptionResults } from '@/components/transcription-results'
 import { Button } from '@/components/ui/button'
+import { Progress } from '@/components/ui/progress'
 import {
   Select,
   SelectContent,
@@ -17,7 +18,6 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { playErrorSound, playSuccessSound } from '@/lib/sound'
 import {
   DEFAULT_MODEL,
-  estimateTranscriptionTime,
   getModelSizeMB,
   MAX_DURATION_SECONDS,
   type WhisperModelKey,
@@ -25,7 +25,7 @@ import {
 } from '@/lib/whisper-models'
 import { audioFileToFloat32Array, WhisperWASM } from '@/lib/whisper-wasm'
 
-type TranscriptionState = 'idle' | 'loading-wasm' | 'loading-model' | 'transcribing' | 'done'
+export type TranscriptionState = 'idle' | 'loading-wasm' | 'loading-model' | 'transcribing' | 'done'
 
 export default function TranscriptionInterface() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -33,13 +33,10 @@ export default function TranscriptionInterface() {
   const [transcriptionState, setTranscriptionState] = useState<TranscriptionState>('idle')
   const [progress, setProgress] = useState(0)
   const [currentModel, setCurrentModel] = useState<WhisperModelKey | null>(null)
-  const [audioDuration, setAudioDuration] = useState<number>(0)
-  const [_estimatedTime, setEstimatedTime] = useState<number>(0)
-  const [remainingTime, setRemainingTime] = useState<number>(0)
+  const [_audioDuration, setAudioDuration] = useState<number>(0)
   const [translateToEnglish, setTranslateToEnglish] = useState<boolean>(false)
   const whisperRef = useRef<WhisperWASM | null>(null)
   const startTimeRef = useRef<number | null>(null)
-  const countdownIntervalRef = useRef<NodeJS.Timeout | null>(null)
 
   // Check if default model is already downloaded on mount
   useEffect(() => {
@@ -48,7 +45,6 @@ export default function TranscriptionInterface() {
         const isModelDownloaded = await whisperModelManager.isModelDownloaded(DEFAULT_MODEL)
         if (isModelDownloaded) {
           setCurrentModel(DEFAULT_MODEL)
-          console.log(`✅ Model '${DEFAULT_MODEL}' found in IndexedDB`)
         }
       } catch (error) {
         console.error('Error checking for existing model:', error)
@@ -56,13 +52,6 @@ export default function TranscriptionInterface() {
     }
 
     checkExistingModel()
-
-    // Cleanup interval on unmount
-    return () => {
-      if (countdownIntervalRef.current) {
-        clearInterval(countdownIntervalRef.current)
-      }
-    }
   }, [])
 
   const getAudioDuration = async (file: File): Promise<number> => {
@@ -85,7 +74,7 @@ export default function TranscriptionInterface() {
   }
 
   const handleFileSelect = async (file: File) => {
-    // Get audio duration for validation and time estimation
+    // Get audio duration for validation
     const duration = await getAudioDuration(file)
 
     if (duration > MAX_DURATION_SECONDS) {
@@ -107,26 +96,18 @@ export default function TranscriptionInterface() {
     setProgress(0)
     setTranscriptionState('idle')
     setAudioDuration(0)
-    setEstimatedTime(0)
-    setRemainingTime(0)
-
-    // Clean up countdown interval
-    if (countdownIntervalRef.current) {
-      clearInterval(countdownIntervalRef.current)
-      countdownIntervalRef.current = null
-    }
   }
 
   const getButtonText = () => {
     switch (transcriptionState) {
       case 'loading-wasm':
-        return 'Loading WASM...'
+        return 'Loading engine…'
       case 'loading-model':
-        return `Downloading Model... ${Math.round(progress)}%`
+        return `Downloading model… ${Math.round(progress)}%`
       case 'transcribing':
-        return remainingTime > 0 ? `Transcribing... (${remainingTime}s)` : 'Transcribing...'
+        return 'Transcribing…'
       case 'done':
-        return 'Done!'
+        return 'Done'
       default:
         return 'Transcribe'
     }
@@ -144,7 +125,6 @@ export default function TranscriptionInterface() {
       // Step 1: Load WASM module if needed
       if (!whisperRef.current) {
         setTranscriptionState('loading-wasm')
-        console.log('🔄 Loading WASM module...')
 
         const whisper = new WhisperWASM()
         await whisper.loadModule()
@@ -154,7 +134,6 @@ export default function TranscriptionInterface() {
       // Step 2: Download and initialize model if needed
       if (!currentModel) {
         setTranscriptionState('loading-model')
-        console.log(`🔄 Downloading ${DEFAULT_MODEL} model...`)
 
         // Download the default model with progress
         await whisperModelManager.downloadModel(DEFAULT_MODEL, progress => {
@@ -173,7 +152,6 @@ export default function TranscriptionInterface() {
       } else {
         // Model already exists, just load it into WASM if not already initialized
         setTranscriptionState('loading-model')
-        console.log(`🔄 Loading existing ${currentModel} model...`)
 
         const modelData = await whisperModelManager.getModel(currentModel)
         if (!modelData) {
@@ -187,27 +165,10 @@ export default function TranscriptionInterface() {
       // Step 3: Transcribe
       setTranscriptionState('transcribing')
 
-      // Calculate estimated time and start countdown
-      const modelKey = currentModel || DEFAULT_MODEL
-      const baseEstimated = estimateTranscriptionTime(modelKey, audioDuration)
-      // Translation takes approximately double the time
-      const estimated = translateToEnglish ? baseEstimated * 2 : baseEstimated
-      setEstimatedTime(estimated)
-      setRemainingTime(estimated)
-
-      // Start countdown timer
-      countdownIntervalRef.current = setInterval(() => {
-        setRemainingTime(prev => Math.max(0, prev - 1))
-      }, 1000)
-
       // Convert audio file to format needed by whisper
-      console.log('🎵 Converting audio file...')
-
       const audioData = await audioFileToFloat32Array(selectedFile)
 
       // Run transcription
-      console.log('🗣️ Starting transcription...')
-
       const result = await whisperRef.current?.transcribe(audioData, {
         language: 'auto',
         translate: translateToEnglish,
@@ -218,13 +179,6 @@ export default function TranscriptionInterface() {
 
       setTranscriptionResult(result)
       setTranscriptionState('done')
-
-      // Clear countdown interval
-      if (countdownIntervalRef.current) {
-        clearInterval(countdownIntervalRef.current)
-        countdownIntervalRef.current = null
-      }
-      setRemainingTime(0)
 
       // Calculate time taken
       const timeElapsed = startTimeRef.current ? Date.now() - startTimeRef.current : 0
@@ -247,31 +201,39 @@ export default function TranscriptionInterface() {
       playErrorSound()
       toast.error(`Transcription failed: ${errorMessage}`)
 
-      // Clear countdown interval on error
-      if (countdownIntervalRef.current) {
-        clearInterval(countdownIntervalRef.current)
-        countdownIntervalRef.current = null
-      }
-      setRemainingTime(0)
       setTranscriptionState('idle')
       setProgress(0)
     }
   }
 
   const isTranscribing = transcriptionState !== 'idle' && transcriptionState !== 'done'
+  const buttonText = getButtonText()
+
+  const transcribeButton = (
+    <Button
+      onClick={handleTranscribe}
+      disabled={isTranscribing}
+      size='lg'
+      className='w-full max-w-xs md:w-auto px-8 font-semibold cursor-pointer'
+    >
+      {/* key remount replays the text-swap transition on label change */}
+      <span key={buttonText} className='t-text-swap'>
+        {buttonText}
+      </span>
+    </Button>
+  )
 
   return (
-    <div className='w-full max-w-4xl mx-auto space-y-4 md:space-y-6 p-4 md:p-6'>
-      {/* Apple-style liquid glass card container */}
-      <div className='bg-white/60 dark:bg-gray-900/60 backdrop-blur-2xl rounded-3xl border border-white/30 dark:border-gray-700/60 shadow-xl dark:shadow-2xl p-4 md:p-6 space-y-4 md:space-y-6'>
+    <div className='w-full max-w-6xl mx-auto space-y-4 md:space-y-6 p-4 md:p-6'>
+      <div className='bg-card border border-border shadow-card rounded-2xl p-4 md:p-6 space-y-4 md:space-y-6'>
         {/* Hero Section */}
         <div className='text-center space-y-2 md:space-y-3'>
-          <h1 className='text-2xl md:text-4xl font-bold tracking-tight bg-gradient-to-r from-gray-800 to-gray-600 dark:from-white dark:via-gray-100 dark:to-gray-300 bg-clip-text text-transparent'>
+          <h1 className='text-2xl md:text-4xl font-semibold tracking-tight text-foreground'>
             Free Transcription
           </h1>
-          <p className='text-sm md:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed px-2'>
-            Transcribe audio and video files locally in the browser. Private, no sign-up, and always
-            <span className='text-emerald-600 dark:text-emerald-400 font-semibold'> FREE</span>.
+          <p className='text-sm md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed px-2'>
+            Transcribe audio and video files locally in the browser. Private, no sign-up, and always{' '}
+            <span className='text-brand-soft-foreground font-semibold'>free</span>.
           </p>
         </div>
 
@@ -287,10 +249,7 @@ export default function TranscriptionInterface() {
         {selectedFile && (
           <div className='flex justify-center px-4'>
             <div className='flex items-center gap-3'>
-              <label
-                htmlFor='translate-select'
-                className='text-sm font-medium text-gray-700 dark:text-gray-300'
-              >
+              <label htmlFor='translate-select' className='text-sm font-medium'>
                 Output:
               </label>
               <Select
@@ -322,44 +281,35 @@ export default function TranscriptionInterface() {
 
         {/* Transcribe Button */}
         {selectedFile && (
-          <div className='flex justify-center px-4'>
+          <div className='flex flex-col items-center gap-3 px-4'>
             {!currentModel ? (
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      onClick={handleTranscribe}
-                      disabled={isTranscribing}
-                      size='lg'
-                      className='w-full max-w-xs md:w-auto px-6 md:px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 border-0 shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 text-white font-semibold'
-                    >
-                      {getButtonText()}
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent
-                    side='top'
-                    className='bg-black/80 backdrop-blur-md border border-white/20 text-sm text-gray-200 w-70'
-                  >
+                  <TooltipTrigger asChild>{transcribeButton}</TooltipTrigger>
+                  <TooltipContent side='top' className='max-w-64 text-sm'>
                     First time? We'll download a ~{getModelSizeMB(DEFAULT_MODEL)}MB model to your
                     browser. It'll be cached locally for faster future transcriptions!
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             ) : (
-              <Button
-                onClick={handleTranscribe}
-                disabled={isTranscribing}
-                size='lg'
-                className='w-full max-w-xs md:w-auto px-6 md:px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 border-0 shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 text-white font-semibold'
-              >
-                {getButtonText()}
-              </Button>
+              transcribeButton
+            )}
+
+            {/* Real progress bar while the model downloads */}
+            {transcriptionState === 'loading-model' && progress > 0 && (
+              <div className='w-full max-w-xs space-y-1.5'>
+                <Progress value={progress} className='h-2' />
+                <p className='text-muted-foreground text-center text-xs'>
+                  One-time download — the model is stored on your device
+                </p>
+              </div>
             )}
           </div>
         )}
 
         {/* Results */}
-        <TranscriptionResults result={transcriptionResult} isTranscribing={isTranscribing} />
+        <TranscriptionResults result={transcriptionResult} state={transcriptionState} />
       </div>
     </div>
   )

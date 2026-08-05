@@ -140,13 +140,13 @@ export function FileUpload({
   if (selectedFile) {
     return (
       <div className='w-full space-y-4'>
-        <div className='flex items-center justify-between p-4 bg-white/50 dark:bg-black/20 backdrop-blur-xl backdrop-saturate-150 rounded-2xl border border-white/30 dark:border-gray-800/50'>
-          <div className='flex items-center space-x-3'>
-            <div className='text-primary'>{getFileIcon(selectedFile.type)}</div>
-            <div className='flex flex-col'>
-              <span className='font-medium text-sm'>{selectedFile.name}</span>
+        <div className='flex items-center justify-between p-4 bg-background rounded-xl border border-border'>
+          <div className='flex items-center gap-3 min-w-0'>
+            <div className='text-brand shrink-0'>{getFileIcon(selectedFile.type)}</div>
+            <div className='flex flex-col min-w-0'>
+              <span className='font-medium text-sm truncate'>{selectedFile.name}</span>
               <span className='text-xs text-muted-foreground'>
-                {formatFileSize(selectedFile.size)} •{' '}
+                {formatFileSize(selectedFile.size)} ·{' '}
                 {selectedFile.type.split('/')[1]?.toUpperCase()}
               </span>
             </div>
@@ -157,7 +157,7 @@ export function FileUpload({
               variant='ghost'
               size='sm'
               onClick={onRemoveFile}
-              className='h-8 w-8 p-0 hover:bg-red-500/20 hover:text-red-600 dark:hover:text-red-400 cursor-pointer rounded-lg backdrop-blur-sm transition-all duration-300'
+              className='h-8 w-8 p-0 hover:bg-destructive/10 hover:text-destructive cursor-pointer shrink-0'
             >
               <X className='h-4 w-4' />
             </Button>
@@ -165,7 +165,7 @@ export function FileUpload({
         </div>
 
         {error && (
-          <div className='text-sm text-red-600 dark:text-red-400 p-3 bg-red-500/10 backdrop-blur-xl rounded-2xl border border-red-500/20'>
+          <div className='text-sm text-destructive p-3 bg-destructive/5 rounded-xl border border-destructive/30'>
             {error}
           </div>
         )}
@@ -177,10 +177,10 @@ export function FileUpload({
     <div className='w-full space-y-4'>
       <div
         className={cn(
-          'relative border-2 border-dashed rounded-3xl p-8 text-center transition-all duration-300 cursor-pointer bg-white/30 dark:bg-black/10 backdrop-blur-2xl backdrop-saturate-150',
+          'relative border-2 border-dashed rounded-xl p-8 text-center transition-all duration-200 cursor-pointer bg-background',
           isDragOver
-            ? 'border-blue-500/60 bg-blue-500/10 dark:bg-blue-500/5 scale-[1.02]'
-            : 'border-white/40 dark:border-gray-800/50 hover:border-blue-500/40 hover:bg-white/40 dark:hover:bg-black/20',
+            ? 'border-brand/60 bg-brand-soft scale-[1.01]'
+            : 'border-border hover:border-brand/40 hover:bg-brand-soft/40',
           isTranscribing && 'opacity-50 cursor-not-allowed'
         )}
       >
@@ -197,29 +197,25 @@ export function FileUpload({
         />
 
         <div className='space-y-4'>
-          <div className='mx-auto w-12 h-12 bg-blue-500/20 backdrop-blur-xl rounded-2xl flex items-center justify-center'>
-            <Upload className='h-6 w-6 text-blue-600 dark:text-blue-400' />
+          <div className='mx-auto w-12 h-12 bg-brand-soft rounded-xl flex items-center justify-center'>
+            <Upload className='h-6 w-6 text-brand-soft-foreground' />
           </div>
 
           <div className='space-y-2'>
-            <h3 className='text-lg font-medium text-gray-800 dark:text-gray-200'>
-              Drop audio or video file here
-            </h3>
-            <p className='text-sm text-gray-600 dark:text-gray-400'>
-              or click to browse your files
-            </p>
+            <h3 className='text-lg font-medium'>Drop audio or video file here</h3>
+            <p className='text-sm text-muted-foreground'>or click to browse your files</p>
           </div>
 
-          <div className='text-xs text-gray-500 dark:text-gray-500'>
+          <div className='text-xs text-muted-foreground'>
             <p>Audio: MP3, WAV, M4A, AAC, OGG, FLAC, WebM, OPUS, AIFF, AMR</p>
             <p>Video: MP4, MOV, AVI, MKV, WebM, 3GP, FLV, WMV, OGV</p>
-            <p className='mt-1'>Max file size: 1GB • Max duration: 30 minutes</p>
+            <p className='mt-1'>Max file size: 1GB · Max duration: 30 minutes</p>
           </div>
         </div>
       </div>
 
       {error && (
-        <div className='text-sm text-red-600 dark:text-red-400 p-3 bg-red-500/10 backdrop-blur-xl rounded-2xl border border-red-500/20'>
+        <div className='text-sm text-destructive p-3 bg-destructive/5 rounded-xl border border-destructive/30'>
           {error}
         </div>
       )}
