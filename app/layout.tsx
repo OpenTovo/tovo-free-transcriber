@@ -14,10 +14,17 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 })
 
+const siteUrl = 'https://transcribe.tovo.dev'
+const siteTitle = 'Tovo Free Transcriber | Audio & Video to Text'
+const siteDescription = 'Free, private audio and video transcription in your browser.'
+
 export const metadata: Metadata = {
-  title: 'Tovo Free Transcriber - Convert Audio & Video to Text Online',
-  description:
-    'Free online audio and video transcription tool. Convert speech to text, transcribe podcasts, interviews, meetings, lectures, and voice recordings. No signup required, works offline in your browser.',
+  title: siteTitle,
+  description: siteDescription,
+  metadataBase: new URL(siteUrl),
+  alternates: {
+    canonical: '/',
+  },
   keywords: [
     'audio to text',
     'video to text',
@@ -58,28 +65,26 @@ export const metadata: Metadata = {
     telephone: false,
   },
   openGraph: {
-    title: 'Tovo Free Transcriber - Convert Audio & Video to Text',
-    description:
-      'Free online transcription tool for audio and video files. Convert speech to text with AI-powered accuracy. No signup required, works offline.',
-    url: 'https://transcribe.tovo.dev',
+    title: siteTitle,
+    description: siteDescription,
+    url: siteUrl,
     siteName: 'Tovo Free Transcriber',
     locale: 'en_US',
     type: 'website',
     images: [
       {
-        url: '/tovo-logo-512.png',
-        width: 512,
-        height: 512,
-        alt: 'Tovo Free Transcriber Logo',
+        url: '/opengraph-image',
+        width: 1200,
+        height: 630,
+        alt: 'Tovo Free Transcriber',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Tovo Free Transcriber - Convert Audio & Video to Text',
-    description:
-      'Free online transcription tool for audio and video files. Convert speech to text with AI-powered accuracy.',
-    images: ['/tovo-logo-512.png'],
+    title: siteTitle,
+    description: siteDescription,
+    images: ['/twitter-image'],
   },
   robots: {
     index: true,
