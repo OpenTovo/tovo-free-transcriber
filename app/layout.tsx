@@ -15,8 +15,9 @@ const geistMono = Geist_Mono({
 })
 
 const siteUrl = 'https://transcribe.tovo.dev'
-const siteTitle = 'Tovo Free Transcriber | Audio & Video to Text'
-const siteDescription = 'Free, private audio and video transcription in your browser.'
+const siteTitle = 'Tovo Free Transcriber | Private Audio and Video to Text'
+const siteDescription =
+  'Convert audio and video to text privately in your browser. No uploads or sign-up, just a clean transcript on your device.'
 
 export const metadata: Metadata = {
   title: siteTitle,
