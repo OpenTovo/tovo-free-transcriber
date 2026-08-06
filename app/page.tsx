@@ -1,6 +1,7 @@
 import Footer from '@/components/footer'
 import Header from '@/components/header'
 import TranscriptionInterface from '@/components/transcription-interface'
+import { TryBanner } from '@/components/try-banner'
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
 
       {/* Content */}
       <div className='relative z-10 min-h-screen flex flex-col'>
+        <TryBanner />
         <Header />
 
         <main className='flex-1 flex items-center justify-center'>

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import Footer from '@/components/footer'
 import Header from '@/components/header'
+import { TryBanner } from '@/components/try-banner'
 
 export const metadata: Metadata = {
   title: 'Free Audio & Video Transcription Guide - FAQ & Help | Tovo Transcriber',
@@ -28,6 +29,7 @@ export const viewport: Viewport = {
 export default function DocsLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className='min-h-screen flex flex-col bg-background'>
+      <TryBanner />
       <Header />
       <main className='flex-1'>{children}</main>
       <Footer />
