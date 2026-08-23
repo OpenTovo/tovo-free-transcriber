@@ -7,6 +7,7 @@
   "name": "tovo-free-transcriber",
   "main": ".open-next/worker.js",
   "compatibility_date": "2025-03-01",
+  "workers_dev": false,
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": {
     "binding": "ASSETS",
