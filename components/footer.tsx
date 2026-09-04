@@ -10,7 +10,7 @@ const socialLinks = [
     icon: <Mail className='h-4 w-4' />,
   },
   {
-    href: 'https://x.com/qiweiy',
+    href: 'https://x.com/qiweiiiy',
     label: 'X',
     external: true,
     icon: <XIcon className='h-3.5 w-3.5' />,
